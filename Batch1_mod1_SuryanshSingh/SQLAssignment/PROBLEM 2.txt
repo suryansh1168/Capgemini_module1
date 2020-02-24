@@ -1,0 +1,234 @@
+Enter user-name: suryansh
+Enter password:
+Last Successful login time: Sat Feb 15 2020 06:04:58 +05:30
+
+Connected to:
+Oracle Database 18c Express Edition Release 18.0.0.0.0 - Production
+Version 18.4.0.0.0
+
+SQL> connect suryansh
+Enter password:
+Connected.
+SQL> SELECT INSTR('Mississippi','i',2,3) FROM DUAL;
+
+INSTR('MISSISSIPPI','I',2,3)
+----------------------------
+                           8
+
+SQL> SELECT TO_CHAR(NEXT_DAY(SYSDATE,'TUESDAY'),'DD MONTH ,YYYY')
+  2  AS DAY
+  3  FROM DUAL
+  4  WHERE NEXT_DAY(SYSDATE,'TUESDAY')<LAST_DAY(SYSDATE) ;
+
+DAY
+---------------------------------------------
+18 FEBRUARY  ,2020
+
+SQL> SELECT STUDENT_CODE,STUDENT_NAME,
+  2  DECODE(DEPT_CODE,20,'ELECTRICALS',30,'ELECTRONICS','OTHERS') DEPARTMENT_NAME
+  3  FROM STUDENT_MASTER;
+
+no rows selected
+
+SQL> SELECT STAFF_NAME,
+  2  TO_CHAR(HIREDATE,'DD MONTH YYYY')
+  3  AS HIRE_DATE,
+  4  TO_CHAR(HIREDATE,'DAY')AS DAY
+  5  FROM STAFF_MASTER
+  6  ORDER BY TO_CHAR(HIREDATE,'DAY') DESC;
+
+STAFF_NAME
+--------------------------------------------------
+HIRE_DATE
+--------------------------------------------
+DAY
+------------------------------------
+SUPPORT
+01 JANUARY   2015
+THURSDAY
+
+SUPPORT
+01 JANUARY   2000
+SATURDAY
+
+STAFF_NAME
+--------------------------------------------------
+HIRE_DATE
+--------------------------------------------
+DAY
+------------------------------------
+
+SUPPORT
+01 JANUARY   2001
+MONDAY
+
+SUPPORT
+01 JANUARY   2018
+
+STAFF_NAME
+--------------------------------------------------
+HIRE_DATE
+--------------------------------------------
+DAY
+------------------------------------
+MONDAY
+
+SUPPORT
+01 JANUARY   2010
+FRIDAY
+
+SUPPORT
+
+STAFF_NAME
+--------------------------------------------------
+HIRE_DATE
+--------------------------------------------
+DAY
+------------------------------------
+01 JANUARY   1999
+FRIDAY
+
+SUPPORT
+01 JANUARY   1988
+FRIDAY
+
+
+7 rows selected.
+
+SQL> SELECT STAFF_NAME,STAFF_SAL,
+  2  CASE
+  3  WHEN STAFF_SAL >=50000 THEN 'A'
+  4  WHEN STAFF_SAL  >25000 AND  STAFF_SAL<50000 THEN 'B'
+  5  WHEN STAFF_SAL  >10000 AND  STAFF_SAL<25000 THEN 'C'
+  6  ELSE 'D'
+  7  END CASE
+  8  FROM STAFF_MASTER;
+
+STAFF_NAME                                          STAFF_SAL C
+-------------------------------------------------- ---------- -
+SUPPORT                                                 50000 A
+SUPPORT                                                 50000 A
+SUPPORT                                                 50000 A
+SUPPORT                                                 50000 A
+SUPPORT                                                 50000 A
+SUPPORT                                                 50000 A
+SUPPORT                                                 50000 A
+
+7 rows selected.
+
+SQL> SELECT * FROM STAFF_MASTER
+  2  WHERE
+  3  TO_CHAR(HIREDATE,'DD') BETWEEN 1 AND 15 AND TO_CHAR(HIREDATE,'MONTH') LIKE '%DECEMBER%' ;
+
+no rows selected
+
+SQL> SELECT STAFF_NAME,ROUND(MONTHS_BETWEEN(SYSDATE,HIREDATE)) AS MONTHS_WORKED
+  2   FROM STAFF_MASTER
+  3  ORDER BY MONTHS_WORKED DESC;
+
+STAFF_NAME                                         MONTHS_WORKED
+-------------------------------------------------- -------------
+SUPPORT                                                      385
+SUPPORT                                                      253
+SUPPORT                                                      241
+SUPPORT                                                      229
+SUPPORT                                                      121
+SUPPORT                                                       61
+SUPPORT                                                       25
+
+7 rows selected.
+
+SQL> SELECT STUDENT_NAME,
+  2  TO_CHAR(STUDENTDOB,'MONTH DD YYYY') AS STUDENT_DOB
+  3  FROM STUDENT_MASTER
+  4  WHERE TO_CHAR(STUDENTDOB,'DAY') LIKE  ('%SATURDAY%') OR TO_CHAR(STUDENTDOB,'DAY') LIKE  ('%SUNDAY%') ;
+WHERE TO_CHAR(STUDENTDOB,'DAY') LIKE  ('%SATURDAY%') OR TO_CHAR(STUDENTDOB,'DAY') LIKE  ('%SUNDAY%')
+                                                                *
+ERROR at line 4:
+ORA-00904: "STUDENTDOB": invalid identifier
+
+
+SQL> SELECT STUDENT_NAME,
+  2  TO_CHAR(STUDENTDOB,'MONTH DD YYYY') AS STUDENT_DOB
+  3  FROM STUDENT_MASTER
+  4  WHERE TO_CHAR(STUDENTDOB,'DAY') LIKE  ('%SATURDAY%') OR TO_CHAR(STUDENTDOB,'DAY') LIKE  ('%SUNDAY%') ;
+WHERE TO_CHAR(STUDENTDOB,'DAY') LIKE  ('%SATURDAY%') OR TO_CHAR(STUDENTDOB,'DAY') LIKE  ('%SUNDAY%')
+                                                                *
+ERROR at line 4:
+ORA-00904: "STUDENTDOB": invalid identifier
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  SELECT STUDENT_NAME,
+  2  TO_CHAR(STUDENT_DOB,'MONTH DD YYYY') AS STUDENT_DOB
+  3  FROM STUDENT_MASTER
+  4* WHERE TO_CHAR(STUDENT_DOB,'DAY') LIKE  ('%SATURDAY%') OR TO_CHAR(STUDENT_DOB,'DAY') LIKE  ('%SUNDAY%') ;
+SQL> SELECT STUDENT_NAME,
+  2  TO_CHAR(STUDENT_DOB,'MONTH DD YYYY') AS STUDENT_DOB
+  3  FROM STUDENT_MASTER
+  4  WHERE TO_CHAR(STUDENT_DOB,'DAY') LIKE  ('%SATURDAY%') OR TO_CHAR(STUDENT_DOB,'DAY') LIKE  ('%SUNDAY%') ;
+
+no rows selected
+
+SQL> SELECT staff_name,
+  2  LPAD(salary, 15, '$') SALARY
+  3  FROM staff_master;
+LPAD(salary, 15, '$') SALARY
+     *
+ERROR at line 2:
+ORA-00904: "SALARY": invalid identifier
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  SELECT staff_name,
+  2  LPAD(staff_sal, 15, '$') SALARY
+  3  FROM staff_master
+  4* ;
+SQL> SELECT staff_name,
+  2  LPAD(staff_sal, 15, '$') SALARY
+  3  FROM staff_master
+  4  ;
+
+STAFF_NAME
+--------------------------------------------------
+SALARY
+------------------------------------------------------------
+SUPPORT
+$$$$$$$$$$50000
+
+SUPPORT
+$$$$$$$$$$50000
+
+SUPPORT
+$$$$$$$$$$50000
+
+
+STAFF_NAME
+--------------------------------------------------
+SALARY
+------------------------------------------------------------
+SUPPORT
+$$$$$$$$$$50000
+
+SUPPORT
+$$$$$$$$$$50000
+
+SUPPORT
+$$$$$$$$$$50000
+
+
+STAFF_NAME
+--------------------------------------------------
+SALARY
+------------------------------------------------------------
+SUPPORT
+$$$$$$$$$$50000
+
+
+7 rows selected.
+
+SQL>
